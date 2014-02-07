@@ -1,5 +1,5 @@
 //Document ready
-// $(document).ready(function(){
+$(document).ready(function(){
  
 
 	//Define Supplant
@@ -217,6 +217,19 @@
 	//================ Global Variables =================
 	var foodTotal = 0;
 
+	var highlight = function(func, that){
+		$(that).toggleClass('btn-toggled').siblings().removeClass('btn-toggled');
+		$('.menu-item').removeClass('highlight');
+		if ($(that).hasClass('btn-toggled')){
+			for (var i = 0; i < mainMenu.platesArr.length; i++) {
+				if (mainMenu.platesArr[i][func]()) {
+					var name = mainMenu.platesArr[i].name;
+					$('[data-id = '+ name +']').addClass("highlight");
+				}
+			}
+		}
+	};
+
 	//================ Event Handlers =================
 	$(document).on('click', '.menu-item', function(){
 			$(this).find('.btn-add').fadeToggle('fast');
@@ -224,7 +237,7 @@
 
 
 	$(document).on('click', '.btn-add', function(event){
-		event.stopPropagation();
+		event.stopPropagation();		
 		var foodInfo = $(this).closest('.menu-item').data();
 		var addedFood = $('<div class="order-item"><p>' + foodInfo.id + ' <span class="order-item-price">'+ foodInfo.price +'</span></p></div>');
 		addedFood.appendTo('.added-items');
@@ -233,48 +246,17 @@
 	});
 
 	$(document).on('click', '#btn-vegan', function() {
-		// $('.btn-pref').removeClass('btn-toggled');
-		$(this).toggleClass('btn-toggled').siblings().removeClass('btn-toggled');
-		$('.menu-item').removeClass('highlight');
-		if ($(this).hasClass('btn-toggled')){
-			for (var i = 0; i < mainMenu.platesArr.length; i++) {
-				if (mainMenu.platesArr[i].isVegan()) {
-					var name = mainMenu.platesArr[i].name;
-					$('[data-id = '+ name +']').addClass("highlight");
-				}
-			}
-		}
+		highlight('isVegan', this);
 	});
 
+
 	$(document).on('click', '#btn-gluten', function() {
-		// $('.btn-pref').removeClass('btn-toggled');
-		$(this).toggleClass('btn-toggled').siblings().removeClass('btn-toggled');
-		$('.menu-item').removeClass('highlight');
-		if ($(this).hasClass('btn-toggled')){
-			for (var i = 0; i < mainMenu.platesArr.length; i++) {
-				if (mainMenu.platesArr[i].isGlutenFree()) {
-					var name = mainMenu.platesArr[i].name;
-					$('[data-id = '+ name +']').addClass("highlight");
-				}
-			}
-		}
+		highlight('isGlutenFree', this);
 	});
 
 	$(document).on('click', '#btn-citrus', function() {
-		// $('.btn-pref').removeClass('btn-toggled');
-		$(this).toggleClass('btn-toggled').siblings().removeClass('btn-toggled');
-		$('.menu-item').removeClass('highlight');
-		if ($(this).hasClass('btn-toggled')){
-			for (var i = 0; i < mainMenu.platesArr.length; i++) {
-				if (mainMenu.platesArr[i].isCitrusFree()) {
-					var name = mainMenu.platesArr[i].name;
-					$('[data-id = '+ name +']').addClass("highlight");
-				}
-			}
-		}
+		highlight('isCitrusFree', this);
 	});
-
-	//================ Create Preference Menu =================
 
 
 	//================ Main =================
@@ -283,4 +265,4 @@
 	$('#main-container').append(mainMenu.create());
 	$('.menu').append('<div class="btn-container"><button class="btn btn-pref" id="btn-vegan" type="button">Vegan</button><button class="btn btn-pref" id="btn-gluten" type="button">Gluten Free</button><button class="btn btn-pref" id="btn-citrus" type="button">Citrus Free</button></div>');
 
-// } );
+} );
